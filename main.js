@@ -24,13 +24,14 @@ function Tree(arr) {
   // remove duplicates
   // https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
   arr = [...new Set(arr)];
+  console.log(...arr);
 
   let _tree = buildTree(arr, 0, arr.length - 1);
 
   const tree = () => _tree;    
   const insert = (key) => insertRec(_tree, key); 
 
-  return { tree, insert};
+  return { tree, insert };
 }
 
 function insertRec(root, key) {
@@ -46,7 +47,6 @@ function insertRec(root, key) {
     root.setRight(insertRec(root.right(), key));
   }
   
-  // if the value already in array, don't insert
   return root;
 }
 
@@ -64,4 +64,8 @@ function buildTree(arr, start, end) {
 
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree(arr);
+prettyPrint(tree.tree());
+tree.insert(56);
+tree.insert(57);
+tree.insert(58);
 prettyPrint(tree.tree());
