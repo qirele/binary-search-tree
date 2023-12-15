@@ -29,26 +29,73 @@ function Tree(arr) {
   let _tree = buildTree(arr, 0, arr.length - 1);
 
   const tree = () => _tree;    
-  const insert = (key) => insertRec(_tree, key); 
+  const insert = (value) => insertRec(_tree, value); 
+  const deleteValue = (root, value) => deleteNode(root, value);
 
-  return { tree, insert };
+  return { tree, insert, deleteValue };
 }
 
-function insertRec(root, key) {
+function insertRec(root, value) {
   if (root === null) {
     root = Node();
-    root.setData(key);
+    root.setData(value);
     return root;
   }
   
-  if (key < root.data()) {
-    root.setLeft(insertRec(root.left(), key));
-  } else if (key > root.data()) {
-    root.setRight(insertRec(root.right(), key));
+  if (value < root.data()) {
+    root.setLeft(insertRec(root.left(), value));
+  } else if (value > root.data()) {
+    root.setRight(insertRec(root.right(), value));
   }
   
   return root;
 }
+
+function deleteNode(root, value) {
+  // Base case
+  if (root === null) {
+    return root;
+  }
+
+  // Recursive calls for ancestors of
+  // node to be deleted
+  if (value < root.data()) {
+    root.setLeft(deleteNode(root.left(), value));
+    return root;
+  } else if (value > root.data()) {
+    root.setRight(deleteNode(root.right(), value));
+    return root;
+  }
+
+  // If one of the children is empty
+  // or the root is the leaf node
+  if (root.left() === null) {
+    return root.right();
+  } else if (root.right() === null) {
+    return root.left();
+  } else {
+    // both children exist
+    // go right, and then keep going left until null 
+
+    let successorParent = root;
+    
+    let successor = root.right();
+    while (successor.left() !== null) {
+      successorParent = successor;
+      successor = successor.left();
+    }
+
+    if (successorParent !== root) {
+      successorParent.setLeft(successor.right());
+    } else {
+      successorParent.setRight(successor.right());
+    }
+
+    root.setData(successor.data());
+    
+    return root;
+  }
+} 
 
 function buildTree(arr, start, end) {
   if (start > end) return null;
@@ -65,7 +112,5 @@ function buildTree(arr, start, end) {
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree(arr);
 prettyPrint(tree.tree());
-tree.insert(56);
-tree.insert(57);
-tree.insert(58);
+tree.deleteValue(tree.tree(), 8);
 prettyPrint(tree.tree());
