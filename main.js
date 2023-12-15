@@ -26,13 +26,38 @@ function Tree(arr) {
   arr = [...new Set(arr)];
   console.log(...arr);
 
-  let _tree = buildTree(arr, 0, arr.length - 1);
+  let _root = buildTree(arr, 0, arr.length - 1);
 
-  const tree = () => _tree;    
-  const insert = (value) => insertRec(_tree, value); 
-  const deleteValue = (root, value) => deleteNode(root, value);
+  const root = () => _root;    
+  const insert = (value) => insertRec(_root, value); 
+  const deleteNode = (root, value) => deleteRec(root, value);
+  const find = (value) => findRec(_root, value);
+  const levelOrder = (cb) => _levelOrder(_root, cb);
 
-  return { tree, insert, deleteValue };
+  return { root, insert, deleteNode, find, levelOrder};
+}
+
+function _levelOrder(root, cb) {
+  if (root === null) return;
+
+  let queue = [root];
+
+  while (queue.length !== 0) {
+    let node = queue.shift();
+    console.log(node.data());
+    if (node.left() !== null) queue.push(node.left());
+    if (node.right() !== null) queue.push(node.right());
+  }
+}
+
+function findRec(root, value) {
+  if (value < root.data()) {
+    return findRec(root.left(), value);
+  } else if (value > root.data()) {
+    return findRec(root.right(), value);
+  } else {
+    return root;
+  }
 }
 
 function insertRec(root, value) {
@@ -51,7 +76,7 @@ function insertRec(root, value) {
   return root;
 }
 
-function deleteNode(root, value) {
+function deleteRec(root, value) {
   // Base case
   if (root === null) {
     return root;
@@ -60,10 +85,10 @@ function deleteNode(root, value) {
   // Recursive calls for ancestors of
   // node to be deleted
   if (value < root.data()) {
-    root.setLeft(deleteNode(root.left(), value));
+    root.setLeft(deleteRec(root.left(), value));
     return root;
   } else if (value > root.data()) {
-    root.setRight(deleteNode(root.right(), value));
+    root.setRight(deleteRec(root.right(), value));
     return root;
   }
 
@@ -111,6 +136,5 @@ function buildTree(arr, start, end) {
 
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree(arr);
-prettyPrint(tree.tree());
-tree.deleteValue(tree.tree(), 8);
-prettyPrint(tree.tree());
+prettyPrint(tree.root());
+tree.levelOrder();
