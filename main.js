@@ -40,14 +40,20 @@ function Tree(arr) {
 function _levelOrder(root, cb) {
   if (root === null) return;
 
+  let arr = [];
   let queue = [root];
 
   while (queue.length !== 0) {
     let node = queue.shift();
-    console.log(node.data());
+
+    if (cb !== undefined) cb(node);
+    else arr.push(node.data());
+
     if (node.left() !== null) queue.push(node.left());
     if (node.right() !== null) queue.push(node.right());
   }
+
+  if (cb === undefined) return arr;
 }
 
 function findRec(root, value) {
@@ -137,4 +143,4 @@ function buildTree(arr, start, end) {
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree(arr);
 prettyPrint(tree.root());
-tree.levelOrder();
+tree.levelOrder((node) => console.log(node.data()));
