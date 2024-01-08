@@ -1,20 +1,20 @@
-import mergeSort from './merge.js';
-import prettyPrint from './prettyPrint.js';
+import mergeSort from "./merge.js";
+import prettyPrint from "./prettyPrint.js";
 
 function Node() {
   let _data = null;
   let _left = null;
   let _right = null;
 
-  const setData = (data) => _data = data;
-  const setLeft = (left) => _left = left;
-  const setRight = (right) => _right = right;
+  const setData = (data) => (_data = data);
+  const setLeft = (left) => (_left = left);
+  const setRight = (right) => (_right = right);
 
   const data = () => _data;
   const left = () => _left;
   const right = () => _right;
 
-  return {data, left, right, setData, setLeft, setRight};
+  return { data, left, right, setData, setLeft, setRight };
 }
 
 function Tree(arr) {
@@ -28,13 +28,27 @@ function Tree(arr) {
 
   let _root = buildTree(arr, 0, arr.length - 1);
 
-  const root = () => _root;    
-  const insert = (value) => insertRec(_root, value); 
+  const root = () => _root;
+  const insert = (value) => insertRec(_root, value);
   const deleteNode = (root, value) => deleteRec(root, value);
   const find = (value) => findRec(_root, value);
   const levelOrder = (cb) => _levelOrder(_root, cb);
+  const inOrder = (cb) => _inOrder(_root, cb);
 
-  return { root, insert, deleteNode, find, levelOrder};
+  return { root, insert, deleteNode, find, levelOrder, inOrder };
+}
+
+function _inOrder(root, cb) {
+  if (root === null) return;
+
+  let arr = [];
+
+  _inOrder(root.left(), cb);
+  if (cb !== undefined) cb(root);
+  arr.push(root.data());
+  _inOrder(root.right(), cb);
+
+  if (cb === undefined) return arr;
 }
 
 function _levelOrder(root, cb) {
@@ -72,13 +86,13 @@ function insertRec(root, value) {
     root.setData(value);
     return root;
   }
-  
+
   if (value < root.data()) {
     root.setLeft(insertRec(root.left(), value));
   } else if (value > root.data()) {
     root.setRight(insertRec(root.right(), value));
   }
-  
+
   return root;
 }
 
@@ -106,10 +120,10 @@ function deleteRec(root, value) {
     return root.left();
   } else {
     // both children exist
-    // go right, and then keep going left until null 
+    // go right, and then keep going left until null
 
     let successorParent = root;
-    
+
     let successor = root.right();
     while (successor.left() !== null) {
       successorParent = successor;
@@ -123,10 +137,10 @@ function deleteRec(root, value) {
     }
 
     root.setData(successor.data());
-    
+
     return root;
   }
-} 
+}
 
 function buildTree(arr, start, end) {
   if (start > end) return null;
@@ -143,4 +157,7 @@ function buildTree(arr, start, end) {
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree(arr);
 prettyPrint(tree.root());
-tree.levelOrder((node) => console.log(node.data()));
+// tree.levelOrder((node) => console.log(node.data()));
+// console.log("pause");
+// console.log(tree.levelOrder());
+tree.inOrder((node) => console.log(node.data()));

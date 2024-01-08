@@ -11,7 +11,7 @@ export default function mergeSort(arr) {
 
   // sort left part of array
   let leftArr = mergeSort(arr.slice(0, midIdx + 1))
-  
+
   // sort right part of array
   let rightArr = mergeSort(arr.slice(midIdx + 1))
 
@@ -29,7 +29,7 @@ export default function mergeSort(arr) {
       mergedArr.push(rightArr[j++])
     }
   }
-  
+
   for (; i < leftArr.length; i++) {
     mergedArr.push(leftArr[i]);
   }
