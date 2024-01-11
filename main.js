@@ -39,14 +39,18 @@ function Tree(arr) {
 }
 
 function _inOrder(root, cb) {
-  if (root === null) return;
+  if (root === null) return -1;
 
   let arr = [];
 
-  _inOrder(root.left(), cb);
+  let left = _inOrder(root.left(), cb);
+  if (left !== -1) arr.push(...left);
+
   if (cb !== undefined) cb(root);
   arr.push(root.data());
-  _inOrder(root.right(), cb);
+
+  let right = _inOrder(root.right(), cb);
+  if (right !== -1) arr.push(...right);
 
   if (cb === undefined) return arr;
 }
@@ -157,7 +161,5 @@ function buildTree(arr, start, end) {
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree(arr);
 prettyPrint(tree.root());
-// tree.levelOrder((node) => console.log(node.data()));
-// console.log("pause");
-// console.log(tree.levelOrder());
-tree.inOrder((node) => console.log(node.data()));
+console.log(tree.inOrder());
+// tree.inOrder((node) => console.log(node.data()));
