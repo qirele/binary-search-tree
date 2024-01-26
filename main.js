@@ -35,8 +35,37 @@ function Tree(arr) {
   const levelOrder = (cb) => _levelOrder(_root, cb);
   const inOrder = (cb) => _inOrder(_root, cb);
   const preOrder = (cb) => _preOrder(_root, cb);
+  const postOrder = (cb) => _postOrder(_root, cb);
 
-  return { root, insert, deleteNode, find, levelOrder, inOrder, preOrder };
+  return {
+    root,
+    insert,
+    deleteNode,
+    find,
+    levelOrder,
+    inOrder,
+    preOrder,
+    postOrder,
+  };
+}
+
+function _postOrder(root, cb) {
+  if (root === null) return -1;
+
+  if (cb !== undefined) {
+    _postOrder(root.left(), cb);
+    _postOrder(root.right(), cb);
+    cb(root);
+  }
+
+  let arr = [];
+  let left = _postOrder(root.left());
+  if (left !== -1) arr.push(...left);
+  let right = _postOrder(root.right());
+  if (right !== -1) arr.push(...right);
+  arr.push(root.data());
+
+  return arr;
 }
 
 function _preOrder(root, cb) {
@@ -180,6 +209,6 @@ function buildTree(arr, start, end) {
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree(arr);
 prettyPrint(tree.root());
-console.log(tree.preOrder());
+console.log(tree.postOrder());
 console.log();
-tree.preOrder((node) => console.log(`node val: ${node.data()}`));
+tree.postOrder((node) => console.log(`node val: ${node.data()}`));
