@@ -34,8 +34,21 @@ function Tree(arr) {
   const find = (value) => findRec(_root, value);
   const levelOrder = (cb) => _levelOrder(_root, cb);
   const inOrder = (cb) => _inOrder(_root, cb);
+  const preOrder = (cb) => _preOrder(_root, cb);
 
-  return { root, insert, deleteNode, find, levelOrder, inOrder };
+  return { root, insert, deleteNode, find, levelOrder, inOrder, preOrder };
+}
+
+function _preOrder(root, cb) {
+  if (root === null) return -1;
+
+  let arr = [root.data()];
+  let left = _preOrder(root.left());
+  if (left !== -1) arr.push(...left);
+  let right = _preOrder(root.right());
+  if (right !== -1) arr.push(...right);
+
+  return arr;
 }
 
 function _inOrder(root, cb) {
@@ -161,6 +174,4 @@ function buildTree(arr, start, end) {
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree(arr);
 prettyPrint(tree.root());
-console.log(tree.inOrder());
-console.log("\n");
-tree.inOrder((node) => console.log(node.data()));
+console.log(tree.preOrder());
