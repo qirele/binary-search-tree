@@ -42,6 +42,12 @@ function Tree(arr) {
 function _preOrder(root, cb) {
   if (root === null) return -1;
 
+  if (cb !== undefined) {
+    cb(root);
+    _preOrder(root.left(), cb);
+    _preOrder(root.right(), cb);
+  }
+
   let arr = [root.data()];
   let left = _preOrder(root.left());
   if (left !== -1) arr.push(...left);
@@ -175,3 +181,5 @@ const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree(arr);
 prettyPrint(tree.root());
 console.log(tree.preOrder());
+console.log();
+tree.preOrder((node) => console.log(`node val: ${node.data()}`));
