@@ -37,6 +37,7 @@ function Tree(arr) {
   const preOrder = (cb) => _preOrder(_root, cb);
   const postOrder = (cb) => _postOrder(_root, cb);
   const height = (node) => _height(node);
+  const depth = (node) => _depth(_root, node);
 
   return {
     root,
@@ -48,7 +49,29 @@ function Tree(arr) {
     preOrder,
     postOrder,
     height,
+    depth,
   };
+}
+
+function _depth(root, node) {
+  if (node === -1) return "no such node";
+
+  if (root === null) return 0;
+
+  const rootVal = root.data();
+  const nodeVal = node.data();
+
+  if (rootVal === nodeVal) {
+    return 1;
+  }
+
+  if (rootVal > nodeVal) {
+    return _depth(root.left(), node) + 1;
+  }
+
+  if (rootVal < nodeVal) {
+    return _depth(root.right(), node) + 1;
+  }
 }
 
 function _height(node) {
@@ -60,7 +83,7 @@ function _height(node) {
 
   let leftHeight = _height(node.left());
   let rightHeight = _height(node.right());
-  return leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
+  return leftHeight > rightHeight ? ++leftHeight : ++rightHeight;
 }
 
 function _postOrder(root, cb) {
@@ -137,6 +160,8 @@ function _levelOrder(root, cb) {
 }
 
 function findRec(root, value) {
+  if (root === null) return -1;
+
   if (value < root.data()) {
     return findRec(root.left(), value);
   } else if (value > root.data()) {
@@ -226,4 +251,4 @@ tree.insert(16);
 tree.insert(20);
 tree.insert(24);
 prettyPrint(tree.root());
-console.log(tree.height(tree.root()));
+console.log(tree.depth(tree.find(9)));
