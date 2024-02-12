@@ -38,6 +38,10 @@ function Tree(arr) {
   const postOrder = (cb) => _postOrder(_root, cb);
   const height = (node) => _height(node);
   const depth = (node) => _depth(_root, node);
+  const isBalanced = () => {
+    let obj = _isBalanced(_root);
+    return obj.balanced;
+  };
 
   return {
     root,
@@ -50,7 +54,32 @@ function Tree(arr) {
     postOrder,
     height,
     depth,
+    isBalanced,
   };
+}
+
+function _isBalanced(root) {
+  if (root === null) return { height: 0, balanced: true };
+
+  let objNotBalanced = {
+    height: "Its definitely not balanced",
+    balanced: false,
+  };
+
+  let leftObj = _isBalanced(root.left());
+  if (!leftObj.balanced) return objNotBalanced;
+
+  let rightObj = _isBalanced(root.right());
+  if (!rightObj.balanced) return objNotBalanced;
+
+  let diff = Math.abs(leftObj.height - rightObj.height);
+
+  if (diff > 1) {
+    return objNotBalanced;
+  }
+
+  let max = Math.max(leftObj.height, rightObj.height) + 1;
+  return { height: max, balanced: true };
 }
 
 function _depth(root, node) {
@@ -247,8 +276,5 @@ function buildTree(arr, start, end) {
 
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree(arr);
-tree.insert(16);
-tree.insert(20);
-tree.insert(24);
 prettyPrint(tree.root());
-console.log(tree.depth(tree.find(9)));
+console.log(tree.isBalanced());
