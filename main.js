@@ -43,6 +43,8 @@ function Tree(arr) {
     return obj.balanced;
   };
 
+  const rebalance = () => (_root = _rebalance(_root));
+
   return {
     root,
     insert,
@@ -55,7 +57,13 @@ function Tree(arr) {
     height,
     depth,
     isBalanced,
+    rebalance,
   };
+}
+
+function _rebalance(root) {
+  let inOrderArr = _inOrder(root);
+  return buildTree(inOrderArr, 0, inOrderArr.length - 1);
 }
 
 function _isBalanced(root) {
@@ -276,5 +284,9 @@ function buildTree(arr, start, end) {
 
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree(arr);
+tree.insert(10);
+prettyPrint(tree.root());
+console.log(tree.isBalanced());
+tree.rebalance();
 prettyPrint(tree.root());
 console.log(tree.isBalanced());
