@@ -3,6 +3,12 @@
 It includes basic operations such as insertion, deletion, searching, and tree traversal. 
 Additionally, the project provides a rebalancing feature for maintaining a balanced tree.
 
+## How to run
+
+```
+$ node main.js
+```
+
 ## Tree factory implements these methods:
 
 ### `root()`
