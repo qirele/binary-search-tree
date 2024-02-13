@@ -24,7 +24,6 @@ function Tree(arr) {
   // remove duplicates
   // https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
   arr = [...new Set(arr)];
-  console.log(...arr);
 
   let _root = buildTree(arr, 0, arr.length - 1);
 
@@ -63,6 +62,9 @@ function Tree(arr) {
 
 function _rebalance(root) {
   let inOrderArr = _inOrder(root);
+
+  // remove duplicates
+  inOrderArr = [...new Set(inOrderArr)];
   return buildTree(inOrderArr, 0, inOrderArr.length - 1);
 }
 
@@ -282,11 +284,34 @@ function buildTree(arr, start, end) {
   return root;
 }
 
-const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+// test cases
+function randomArray(length) {
+  let arr = [];
+  for (let i = 0; i < length; i++) {
+    arr[i] = Math.floor(Math.random() * 100);
+  }
+  return arr;
+}
+
+const arr = randomArray(16);
 const tree = Tree(arr);
-tree.insert(10);
 prettyPrint(tree.root());
-console.log(tree.isBalanced());
+console.log(`is tree balanced? ${tree.isBalanced() === true ? `yes` : `no`}`);
+console.log(`level order: ${tree.levelOrder()}`);
+console.log(`pre order: ${tree.preOrder()}`);
+console.log(`post order: ${tree.postOrder()}`);
+console.log(`in order (sorted): ${tree.inOrder()}`);
+console.log(`Unbalancing the tree:`);
+tree.insert(106);
+tree.insert(120);
+tree.insert(105);
+prettyPrint(tree.root());
+console.log(`is tree balanced? ${tree.isBalanced() === true ? `yes` : `no`}`);
+console.log(`rebalancing the tree:`);
 tree.rebalance();
 prettyPrint(tree.root());
-console.log(tree.isBalanced());
+console.log(`is tree balanced? ${tree.isBalanced() === true ? `yes` : `no`}`);
+console.log(`level order: ${tree.levelOrder()}`);
+console.log(`pre order: ${tree.preOrder()}`);
+console.log(`post order: ${tree.postOrder()}`);
+console.log(`in order (sorted): ${tree.inOrder()}`);
